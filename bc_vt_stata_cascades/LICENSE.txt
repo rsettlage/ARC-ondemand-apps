@@ -1,3 +1,5 @@
+copywrite (c) 2020 Virginia Tech
+
 Copyright (c) 2016-2018 Ohio Supercomputer Center
 
 MIT License
