@@ -1,7 +1,7 @@
 # Batch Connect - Example Jupyter Notebook Server
 
 An example Batch Connect app that launches a Jupyter Notebook server within a
-batch job.
+Cascades batch job.
 
 ## Prerequisites
 
