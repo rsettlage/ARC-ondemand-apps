@@ -3,7 +3,7 @@
 ![GitHub Release](https://img.shields.io/github/release/osc/bc_desktop.svg)
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-A Batch Connect app designed to launch a GUI desktop withing a batch job.
+A Batch Connect app designed to launch a GUI desktop within a batch job.
 
 ## Prerequisites
 
