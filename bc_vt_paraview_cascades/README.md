@@ -3,7 +3,7 @@
 ![GitHub Release](https://img.shields.io/github/release/osc/bc_osc_matlab.svg)
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-A Batch Connect app designed for VT ARC OnDemand that launches ParaView within an batch job.
+A Batch Connect app designed for VT ARC OnDemand that launches ParaView within a batch job.
 
 ## Prerequisites
 
