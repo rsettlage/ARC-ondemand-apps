@@ -1,7 +1,7 @@
 # Batch Connect - OSC COMSOL Multiphysics
 
 A Batch Connect app designed for VT OnDemand that launches COMSOL Multiphysics
-within an Cascades batch job.
+within a Cascades batch job.
 
 ## Prerequisites
 
