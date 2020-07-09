@@ -3,7 +3,7 @@
 ![GitHub Release](https://img.shields.io/github/release/osc/bc_osc_qgis.svg)
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-An interactive app designed for OSC OnDemand that launches QGIS within an Owens batch job.
+An interactive app designed for OSC OnDemand that launches QGIS within a Cacades batch job.
 
 ## Prerequisites
 
