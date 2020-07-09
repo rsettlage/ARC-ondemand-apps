@@ -3,8 +3,7 @@
 ![GitHub Release](https://img.shields.io/github/release/osc/bc_osc_stata.svg)
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-A Batch Connect app designed for OSC OnDemand that launches Stata within an
-Owens batch job.
+A Batch Connect app designed for OSC OnDemand that launches Stata within a Cascades batch job.
 
 ## Prerequisites
 
