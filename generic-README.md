@@ -1,3 +1,5 @@
+[![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 # Batch Connect - VT <APP NAME>
 
 A Batch Connect app designed for [Advanced Research Computing]'s VT OnDemand that launches <APP NAME>
