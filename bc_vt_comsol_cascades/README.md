@@ -1,7 +1,7 @@
-# Batch Connect - OSC COMSOL Multiphysics
+# Batch Connect - VT COMSOL Multiphysics
 
-A Batch Connect app designed for VT OnDemand that launches COMSOL Multiphysics
-within a Cascades batch job.
+A Batch Connect app designed for [Advanced Research Computing]'s VT OnDemand that launches COMSOL Multiphysics
+within a Cascades batch job.  For other apps and assistance with Open OnDemand, see [Open OnDemand].
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ For VNC server support:
 - [TurboVNC] 2.1+
 - [websockify] 0.8.0+
 
-For hardware rendering support:
+For hardware rendering support (coming soon ...):
 
 - [X server]
 - [VirtualGL] 2.3+
@@ -27,6 +27,8 @@ For hardware rendering support:
 - [Lmod] 6.0.1+ or any other `module purge` and `module load <modules>` based
   CLI used to load appropriate environments within the batch job
 
+[Open OnDemand] http://openondemand.org/
+[Advanced Research Computing] https://arc.vt.edu/
 [COMSOL Multiphysics]: https://www.comsol.com
 [Xfce Desktop]: https://xfce.org/
 [TurboVNC]: http://www.turbovnc.org/
@@ -37,31 +39,21 @@ For hardware rendering support:
 
 ## Install
 
-Use git to clone this app and checkout the desired branch/version you want to
-use:
+Use git to clone this app:
 
 ```sh
-scl enable git19 -- git clone <repo>
+git clone <repo>
 cd <dir>
-scl enable git19 -- git checkout <tag/branch>
 ```
 
 You will not need to do anything beyond this as all necessary assets are
 installed. You will also not need to restart this app as it isn't a Passenger
 app.
 
-To update the app you would:
-
-```sh
-cd <dir>
-scl enable git19 -- git fetch
-scl enable git19 -- git checkout <tag/branch>
-```
-
 Again, you do not need to restart the app as it isn't a Passenger app.
 
-## Contributing
-1. Fork it ( https://github.com/OSC/bc_osc_comsol/fork )
+## Contributing, see https://osc.github.io/ood-documentation/master/install-ihpc-apps.html for inspiration.
+1. Fork it 
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
