@@ -27,15 +27,15 @@ For hardware rendering support (coming soon ...):
 - [Lmod] 6.0.1+ or any other `module purge` and `module load <modules>` based
   CLI used to load appropriate environments within the batch job
 
-[Open OnDemand] http://openondemand.org/
-[Advanced Research Computing] https://arc.vt.edu/
-[COMSOL Multiphysics]: https://www.comsol.com
-[Xfce Desktop]: https://xfce.org/
-[TurboVNC]: http://www.turbovnc.org/
-[websockify]: https://github.com/novnc/websockify
-[X server]: https://www.x.org/
-[VirtualGL]: http://www.virtualgl.org/
-[Lmod]: https://www.tacc.utexas.edu/research-development/tacc-projects/lmod
+[Open OnDemand] http://openondemand.org/  
+[Advanced Research Computing] https://arc.vt.edu/  
+[COMSOL Multiphysics]: https://www.comsol.com  
+[Xfce Desktop]: https://xfce.org/  
+[TurboVNC]: http://www.turbovnc.org/  
+[websockify]: https://github.com/novnc/websockify  
+[X server]: https://www.x.org/  
+[VirtualGL]: http://www.virtualgl.org/  
+[Lmod]: https://www.tacc.utexas.edu/research-development/tacc-projects/lmod  
 
 ## Install
 
