@@ -75,10 +75,6 @@ echo
 echo starting LaBB-CAT on $(hostname)
 
 
-echo "---------- searching environment for ondemand-preprod ---------"
-env | grep 'ondemand-preprod'
-echo "---------- end environment search ---------"
-
 #### MYSQL ####
 
 mysqlinst="labbcat-db"
@@ -106,8 +102,14 @@ SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_ROOT_PASSWO
 singularity exec $labbcatimg cat /usr/local/tomcat/conf/server.xml > server.xml
 sed -i "s/8080/${port}/g" server.xml
 
+#set labbcat base url (used for links and stylesheets, etc)
+LABBCAT_BASE_URL="https://ondemand.arc.vt.edu"
+[[ $SLURM_SUBMIT_HOST == *"ondemand-preprod"* ]] && LABBCAT_BASE_URL="https://ondemand-preprod.it.vt.edu"
+[[ $SLURM_SUBMIT_HOST == *"ood"* ]] && LABBCAT_BASE_URL="https://ood.arc.vt.edu"
+LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
+echo "LABBCAT_BASE_URL=$LABBCAT_BASE_URL"
+
 #start labbcat
-LABBCAT_BASE_URL="https://ondemand-preprod.it.vt.edu/rnode/$(hostname)/$port"
 dbhost=localhost #"127.0.0.1" #"localhost:3306" #"localhost" #127.0.0.1 #"::" #$mysqlinst #$(hostname) #'*'
 SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
    --bind=${labbcatdir}/usr/local/tomcat:/usr/local/tomcat:rw \
