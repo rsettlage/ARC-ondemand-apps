@@ -32,7 +32,7 @@ labbcatdir="$datadir/install/$labbcatver" #labbcat directory
 mysqldir="$datadir/mysql"                 #mysql directory
 #set up directory if it doesn't exist
 if [[ ! -d $datadir ]]; then 
-  echo "LaBB-CAT directory $labbcatdir does not exist. Creating and doing initial setup..."
+  echo "LaBB-CAT directory $datadir does not exist. Creating and doing initial setup..."
   initialinstall=1 #flag saying we did first time install
   
   #set up LaBB-CAT directory
