@@ -4,7 +4,7 @@
 # Batch Connect - VT LaBB-CAT
 
 A Batch Connect app designed for Advanced Research Computing's VT OnDemand that launches LaBB-CAT
-and an associated MySQL server within a Cascades batch job. Both are launched via Singularity 
+and an associated MySQL server within a DragonsTooth batch job. Both are launched via Singularity 
 containers. For other apps and assistance with Open OnDemand, see [Open OnDemand].
 
 ## Prerequisites
