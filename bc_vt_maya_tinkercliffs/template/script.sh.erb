@@ -1,0 +1,45 @@
+#!/bin/bash
+
+hostname
+## Load up singularity module:
+module load containers/singularity
+
+cd $TMPDIR
+pwd 
+ls -lah
+mkdir render_job
+chmod o+rw ${TMPDIR}/render_job
+ls -lah
+
+######## NEW VARIABLES FROM ONDEMAND
+export ENGINE=<%= context.RenderEngine %>
+export PROJ_NAME="<%= context.ProjName %>"     ## BOB: Getting from human typed name.. would prefer file selection tool
+export PROJ_DIR="$HOME/$PROJ_NAME"             ## Assumes PROJ_NAME is in user's home dir...
+export FILE="$PROJ_DIR/<%= context.SceneName %>"         ## BOB: Also capturing from manual typing.. prefer file widget
+
+export MAYA_IMG="/projects/arcsingularity/<%= context.MayaVersion %>"     ## Maya singularity container (see tweeks)
+##export MAYA_IMG="/groups/arcsingularity/local_maya-2019_m2a_docker.sif"     ## Maya singularity container (see tweeks)
+export DIR_BINDS=${TMPDIR}/render_job:/tmp,/projects:/projects,/work:/work
+echo $DIR_BINDS
+
+export STARTFRAME=""                                    ## Example " -s $(start_frame) " <-- BOB: from OnDemand?
+export ENDFRAME=""                                      ## Example " -e $(end_frame) "
+export OPTS=" -of png -skipExistingFrames off "         ## Other optional options...
+
+
+
+
+## Structured command line example:
+singularity exec --bind $DIR_BINDS $MAYA_IMG \
+    Render -r $ENGINE $OPTS \
+    -proj $PROJ_DIR \
+    $STARTFRAME $ENDFRAME \
+    $FILE
+
+## Working example
+#singularity exec --bind=${TMPDIR}:/tmp,/groups:/groups,/work:/work local_maya-2019_m2a_docker.sif \
+#Render -r sw \
+#-proj ~/SOVA/MAYA-PROJS/Test_ARC_VT \
+#-skipExistingFrames off  \
+#~/SOVA/MAYA-PROJS/Test_ARC_VT/Test_ARC_VT.mel
+

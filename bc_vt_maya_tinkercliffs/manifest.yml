@@ -1,0 +1,7 @@
+---
+name: ARC Maya 3D Rendering Service
+category: Interactive Apps
+subcategory: TinkerCliffs
+role: batch_connect
+description: |
+  This app will launch a multi-threaded, Maya 3D rendering job on ARC. The user need only: <BR>1) First, upload your Maya project to yor ARC home drive, <BR> 2) Use this tool to set your Maya project directory location,<BR>3) Then set the scene file to render.<BR>4) LAUNCH the render job.<BR> 5) Download your rendered scenes once completed.<P><HR/><P>
