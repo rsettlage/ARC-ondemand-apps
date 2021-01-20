@@ -65,7 +65,7 @@ form:
   - SceneName
   - bc_account
   - bc_queue
-  - bc_num_min_per_frame
+  - bc_num_hr_per_proj
   - bc_num_nodes
   - num_cores
   - bc_email_on_started
