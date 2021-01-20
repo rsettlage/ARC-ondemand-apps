@@ -40,7 +40,7 @@ attributes:
 
 
   bc_queue: "normal_q"
-  bc_num_min_per_frame: 59
+  bc_num_hr_per_proj: 24
   bc_num_nodes: 1
 #  bc_account: arcadm
   bc_account:
@@ -49,7 +49,7 @@ attributes:
     help: "This ARC cluster allocation for your rendering course used by the system (SLURM) scheduler. Ask your Instructor if not working."
     value: art45443danimationstudio
 
-  num_cores: 6
+  num_cores: 12
 #    widget: number_field
 #    label: Number of cores per node (12)
 #    value: 12
@@ -65,7 +65,7 @@ form:
   - SceneName
   - bc_account
   - bc_queue
-  - bc_num_min_per_frame
+  - bc_num_hr_per_proj
   - bc_num_nodes
   - num_cores
   - bc_email_on_started
