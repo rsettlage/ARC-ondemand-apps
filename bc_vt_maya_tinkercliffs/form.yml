@@ -36,11 +36,15 @@ attributes:
     required: true
     value: "scenes/"
 
-
-
+  bc_num_hours:
+    label: Number of hours (min-1, max-72)
+    required: true
+    value: 4
+    min: 1
+    max: 72
+    step: 1
 
   bc_queue: "normal_q"
-  bc_num_hr_per_proj: 24
   bc_num_nodes: 1
 #  bc_account: arcadm
   bc_account:
@@ -65,7 +69,7 @@ form:
   - SceneName
   - bc_account
   - bc_queue
-  - bc_num_hr_per_proj
+  - bc_num_hours
   - bc_num_nodes
   - num_cores
   - bc_email_on_started
