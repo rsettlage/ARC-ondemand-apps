@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+pwd
+#unset XDG_RUNTIME_DIR
+
+echo running on `hostname`
+echo starting singularity
+
+module load containers/singularity
+#### make sure singularity directory is present
+if [ ! -d ${SINGULARITY_PULLDIR} ]; then
+   mkdir -vp ${SINGULARITY_PULLDIR}
+fi
+
+# pull the RStudio Server
+# echo build container first, this can take some time
+# echo ood-rstudio-
+# ##singularity pull --force docker://rsettlag/ood-rstudio-
+## and then move to /groups/arcsingularity
+
+touch ${TMPFS}/vnc_startup.log
+touch ${TMPFS}/no_vnc_startup.log
+touch ${TMPFS}/wm_startup.log
+
+ls -lah ${TMPFS}/
+export NO_VNC_PORT=${port}
+
+singularity run --bind=/var:/var,${TMPDIR}:/tmp,/projects:/projects,/work:/work,${TMPFS}/no_vnc_startup.log:/dockerstartup/vnc_startup.log,${TMPFS}/no_vnc_startup.log:/dockerstartup/no_vnc_startup.log,${TMPFS}/wm_startup.log:/dockerstartup/wm_startup.log \
+  /projects/arcsingularity/<%= context.Container %> \
+
+#   --www-port=${port} \
+#   --auth-pam-helper-path=pam-helper 
+##   --rsession-path="${RSESSION_WRAPPER_FILE}" 
+
