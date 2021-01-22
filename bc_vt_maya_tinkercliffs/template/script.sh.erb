@@ -1,10 +1,15 @@
 #!/bin/bash
 
+ls -lah
+
+sleep 5
 hostname
 echo $SHELL
+env > env.txt
+module list
 ## Load up singularity module:
 module load containers/singularity
-
+module list
 cd $TMPDIR
 pwd 
 ls -lah
