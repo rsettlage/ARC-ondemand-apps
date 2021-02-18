@@ -1,10 +1,6 @@
 # Export the module function if it exists
 [[ $(type -t module) == "function" ]] && export -f module
 
-## stage the container for faster response
-cp -v /projects/arcsingularity/<%= context.Container %> $TMPDIR
-
-
 # override
 port_used () {
   local port="${1#*:}"
@@ -13,19 +9,15 @@ port_used () {
 }
 export -f port_used
 
+export password="$(create_passwd 16)"
+echo $password
+export VNC_PW=$password
 
 # Find available port to run server on
 export port=$(find_port ${host})
+
 echo "export NO_VNC_PORT=${port}" >port.rc
-
-export HOSTURL="ood.arc.vt.edu/rnode/"${host}"/"${port}
-echo $HOSTURL
-
-# Create random password to replace "headless"
-export password="$(create_passwd 16)"
-echo $password
 echo "export VNC_PW=${password}" >>port.rc
-
 
 # export USERNAME=USER
 # Define a password and export it for RStudio authentication

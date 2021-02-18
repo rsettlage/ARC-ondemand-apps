@@ -2,32 +2,26 @@
 pwd
 #unset XDG_RUNTIME_DIR
 
+module list
+
 echo running on `hostname`
 echo starting singularity
 
 module load containers/singularity
 #### make sure singularity directory is present
-if [ ! -d ${SINGULARITY_PULLDIR} ]; then
-   mkdir -vp ${SINGULARITY_PULLDIR}
-fi
+#if [ ! -d ${SINGULARITY_PULLDIR} ]; then
+#   mkdir -vp ${SINGULARITY_PULLDIR}
+#fi
 
-# pull the RStudio Server
-# echo build container first, this can take some time
-# echo ood-rstudio-
-# ##singularity pull --force docker://rsettlag/ood-rstudio-
-## and then move to /groups/arcsingularity
 
-touch ${TMPFS}/vnc_startup.log
-touch ${TMPFS}/no_vnc_startup.log
-touch ${TMPFS}/wm_startup.log
+touch vnc.log
+touch novnc.log
+##rm ~/.Xauthority
+env > env_file
 
-ls -lah ${TMPFS}/
-export NO_VNC_PORT=${port}
+##singularity run --bind `pwd`/startup.sh:/dockerstartup/startup.sh,`pwd`/port.rc:/dockerstartup/port.rc,/home/$USER:/home/$USER/Documents --containall --writable-tmpfs /projects/arcsingularity/accetto-ubuntu-vnc-xfce-firefox-g3-Feb2021.sif
+	
+singularity run --bind=/home/$USER:/home/$USER/Documents,/var:/var,`pwd`/vnc.log:/dockerstartup/vnc.log,`pwd`/novnc.log:/dockerstartup/novnc.log,${TMPDIR}:/tmp,/projects:/projects,/work:/work,`pwd`/startup.sh:/dockerstartup/startup.sh,`pwd`/port.rc:/dockerstartup/port.rc --writable-tmpfs \
+	--containall ${TMPDIR}/<%= context.Container %>
 
-singularity run --bind=/var:/var,${TMPDIR}:/tmp,/projects:/projects,/work:/work,${TMPFS}/no_vnc_startup.log:/dockerstartup/vnc_startup.log,${TMPFS}/no_vnc_startup.log:/dockerstartup/no_vnc_startup.log,${TMPFS}/wm_startup.log:/dockerstartup/wm_startup.log \
-  /projects/arcsingularity/<%= context.Container %> \
-
-#   --www-port=${port} \
-#   --auth-pam-helper-path=pam-helper 
-##   --rsession-path="${RSESSION_WRAPPER_FILE}" 
 

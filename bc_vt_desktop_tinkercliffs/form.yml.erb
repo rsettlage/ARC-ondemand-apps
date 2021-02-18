@@ -1,7 +1,9 @@
 # Batch Connect app configuration file
 #
 ---
-cluster: 'tinkercliffs'
+cluster: 
+  - 'tinkercliffs'
+  - 'infer'
 
 # Define attribute values that aren't meant to be modified by the user within
 # the Dashboard form
@@ -56,13 +58,11 @@ attributes:
   Container:
     widget: select
     label: "use container"
-    help: "This defines the R version and basic packages installed. You can install more in your session."
+    help: "This defines the remote desktop version to run."
     options:
-    <%- Dir.glob('/projects/arcsingularity/*sif').each do |f| -%>
+    <%- Dir.glob('/projects/arcsingularity/accetto*sif').each do |f| -%>
       <%- sif = f.sub('/projects/arcsingularity/','') -%>
-      <%- pkg = f.sub('/projects/arcsingularity/','').sub('ood-rstudio-','').chomp(".sif").split('_').first -%>
-      <%- Rver = f.sub('/projects/arcsingularity/','').sub('ood-rstudio-','').chomp(".sif").split('_').last -%>
-      - [ "R: <%= sif %>  <%= sif %>", "<%= sif %>" ]
+      - [ "Container: <%= sif %>", "<%= sif %>" ]
     <%- end -%>
 
 # All of the attributes that make up the Dashboard form (in respective order),
@@ -70,6 +70,7 @@ attributes:
 # files
 #
 form:
+  - cluster
   - Container
   - bc_account
   - reservation

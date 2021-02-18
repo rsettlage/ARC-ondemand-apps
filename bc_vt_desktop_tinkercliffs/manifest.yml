@@ -4,4 +4,4 @@ category: Interactive Apps
 subcategory: TinkerCliffs
 role: batch_connect
 description: |
-  This app will launch a VNC Server in a container on one node.
+  CURRENTLY in DEV -- Eventually, This app will launch a VNC Server in a container on one node.  DONT use Infer -- yet!!
