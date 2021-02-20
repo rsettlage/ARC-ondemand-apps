@@ -14,6 +14,7 @@ batch_connect:
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
 #
 script:
+  copy_environment: true      
   native: 
     - "--nodes=1"
     - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
