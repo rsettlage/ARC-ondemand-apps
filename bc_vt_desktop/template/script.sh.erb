@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 pwd
 #unset XDG_RUNTIME_DIR
@@ -9,7 +9,6 @@ echo running on `hostname`
 echo starting singularity
 
 module load containers/singularity
-module load MATLAB
 
 ## binding log files for troubleshooting
 touch vnc.log
