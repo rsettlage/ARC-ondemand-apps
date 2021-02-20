@@ -1,10 +1,10 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/rsettlage/ARC-ondemand-apps)
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-# Batch Connect - VT Matlab
+# Batch Connect - VT <APP NAME>
 
-A Batch Connect app designed for [Advanced Research Computing]'s VT OnDemand that launches Matlab
-within a batch job.  For other apps and assistance with Open OnDemand, see [Open OnDemand].
+A Batch Connect app designed for [Advanced Research Computing]'s VT OnDemand that launches <APP NAME>
+within a <CLUSTER> batch job.  For other apps and assistance with Open OnDemand, see [Open OnDemand].
 
 ## Prerequisites
 
@@ -13,12 +13,13 @@ This Batch Connect app requires the following software be installed on the
 OnDemand node):
 
 <LIST DEPENDENCIES>
-- [Matlab] 
+- [COMSOL Multiphysics] 5.1+
 - [Xfce Desktop] 4+
-- [Singularity] 3.7+
 
 For VNC server support:
-- Accetto Xfce desktop container
+
+- [TurboVNC] 2.1+
+- [websockify] 0.8.0+
 
 For hardware rendering support (coming soon ...):
 
@@ -32,7 +33,7 @@ For hardware rendering support (coming soon ...):
 
 [Open OnDemand] http://openondemand.org/  
 [Advanced Research Computing] https://arc.vt.edu/  
-[Mathlab]: https://www.mathworks.com  
+[COMSOL Multiphysics]: https://www.comsol.com  
 [Xfce Desktop]: https://xfce.org/  
 [TurboVNC]: http://www.turbovnc.org/  
 [websockify]: https://github.com/novnc/websockify  
