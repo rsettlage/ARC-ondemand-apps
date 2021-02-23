@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 1
+
 #set -e     ### do not use this
 
 declare _mydir=$(dirname $0)

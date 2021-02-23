@@ -9,6 +9,8 @@
 batch_connect:
   template: "basic"
   set_host: "host=$(hostname -s)"
+  conn_params:
+    - ondemand_host
 #
 # Configure the job script submission parameters for the batch job here
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
