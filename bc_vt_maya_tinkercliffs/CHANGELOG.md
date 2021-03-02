@@ -8,3 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
+## 1.1.0 - 2021-02-22
+- updated Maya Version 2020.4
+- license pointer works
+
