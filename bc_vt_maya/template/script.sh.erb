@@ -1,5 +1,6 @@
 #!/bin/bash
 
+unset XDG_RUNTIME_DIR
 
 ## Load up singularity module:
 #TinkerCliffs
@@ -13,7 +14,8 @@ module --ignore-cache load containers/singularity
     #mkdir render_job
     
     # changed above command to be unique per user
-    RENDER_JOB_TMPDIR=$(mktemp -d -t "$(whoami)_render_XXXXXXXXX")
+    RENDER_JOB_TMPDIR=$TMPFS
+    ##$(mktemp -d -t "$(whoami)_render_XXXXXXXXX")
     chmod o+rw $RENDER_JOB_TMPDIR
     cd $RENDER_JOB_TMPDIR
     # for debugging
@@ -46,7 +48,7 @@ module --ignore-cache load containers/singularity
     echo $DIR_BINDS
     
     ## Final Rendering command
-    singularity exec --bind $DIR_BINDS $MAYA_IMG \
+    singularity exec --writable-tmpfs --bind $DIR_BINDS $MAYA_IMG \
         Render -r $ENGINE \
         -proj $USER_DIR \
         -of $FORMAT \
