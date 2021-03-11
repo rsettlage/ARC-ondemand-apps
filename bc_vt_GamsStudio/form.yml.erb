@@ -3,7 +3,7 @@
 ---
 cluster: 
   - 'tinkercliffs'
-##  - 'infer'
+  - 'infer'
 
 # Define attribute values that aren't meant to be modified by the user within
 # the Dashboard form
@@ -39,10 +39,10 @@ attributes:
 
   num_cores:
     widget: number_field
-    label: Number of cores per node (min-1, max-32)
+    label: Number of cores per node (min-1, max-32-infer/128-tc)
     value: 1
     min: 1
-    max: 32
+    max: 128
     step: 1
 
 #  gpu_per_node:
