@@ -1,0 +1,42 @@
+#!/bin/bash
+
+pwd
+unset XDG_RUNTIME_DIR
+
+module list
+
+echo running on `hostname`
+echo starting singularity
+
+module load containers/singularity
+#module load MATLAB
+
+## binding log files for troubleshooting
+touch vnc.log
+touch novnc.log
+
+cat port.rc
+	
+bash start_container.sh ${TMPDIR}/<%= context.Container %> & 
+
+#singularity run --bind=/home/$USER:/home/$USER/Documents,/var:/var,`pwd`/vnc.log:/dockerstartup/vnc.log,`pwd`/novnc.log:/dockerstartup/novnc.log,/tmp:/tmp,/projects:/projects,/work:/work,`pwd`/startup.sh:/dockerstartup/startup.sh,`pwd`/port.rc:/dockerstartup/port.rc --writable-tmpfs --containall ${TMPDIR}/<%= context.Container %>
+
+
+sleep 2
+ls /tmp/.X11-unix/
+echo DISPLAY:$DISPLAY
+export QT_QPA_PLATFORM=offscreen
+#ps aux | grep X
+#netstat -lnt
+source port.rc
+#matlab -desktop
+module load Qt5/5.14.1-GCCcore-9.3.0
+##singularity run --env DISPLAY=$DISPLAY --writable-tmpfs --containall --bind=/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work,`pwd`:/var/log,`pwd`:/var/run /home/prasannapilli/ondemand/dev/qgis_3_18.sif & source port.rc
+##singularity run --bind=/home/$USER:/home/$USER/Documents,/var:/var,`pwd`/vnc.log:/dockerstartup/vnc.log,`pwd`/novnc.log:/dockerstartup/novnc.log,${TMPDIR}:/tmp,/projects:/projects,/work:/work,`pwd`/startup.sh:/dockerstartup/startup.sh,`pwd`/port.rc:/dockerstartup/port.rc --writable-tmpfs \
+##	--containall ${TMPDIR}/<%= context.Container %>
+# Path to GAMS TC Image
+ gams_tc_img='/projects/arcsingularity/gams_tc_latest.sif'
+# # Bind license from user's home directory to GAMS container
+ gamsLicenseBindPath=/home/omer95/gamslice.txt:/home/headless/GAMS/gams33.2_linux_x64_64_sfx/gamslice.txt
+ singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work,$gamsLicenseBindPath $gams_tc_img  /home/headless/GAMS/gams33.2_linux_x64_64_sfx/studio/squashfs-root/AppRun
+
