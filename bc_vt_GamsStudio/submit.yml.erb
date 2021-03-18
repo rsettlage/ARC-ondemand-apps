@@ -14,8 +14,10 @@ batch_connect:
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
 #
 script:
+  copy_environment: true
   native: 
-    - "--nodes=1"
-    - "--cpus-per-task=<%= num_cores.blank? ? 1 : num_cores.to_i %>"
+    - "--nodes=<%= bc_num_slots.blank? ? "1" : bc_num_slots.to_i %>"
+    - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
     - "--time=<%= bc_num_hours + ":0:0" %>"
+    - "--reservation=<%= reservation %>"
     - "--account=<%= bc_account %>"

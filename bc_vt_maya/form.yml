@@ -1,9 +1,9 @@
 # Batch Connect app configuration file
 #
 ---
-cluster: 'tinkercliffs'
-#cluster: 'infer'
-
+cluster: 
+  - 'tinkercliffs'
+#  - 'infer'
 
 #
 form:
@@ -24,7 +24,6 @@ form:
   - bc_num_nodes
   - num_cores
   - bc_email_on_started
-
 
 # for reference
 #  https://osc.github.io/ood-documentation/latest/app-development/interactive/form.html
@@ -92,13 +91,15 @@ attributes:
     widget: number_field
     label: Start Frame
     required: true
+    min: 0
     value: "0"
 
   EndFrame:
     widget: number_field
     label: End Frame
     required: true
-    value: "0"
+    min: 1
+    value: "1"
 
   SkipExistingFrames:
     widget: check_box
@@ -122,6 +123,15 @@ attributes:
     max: 72
     step: 1
 
+  gpu_per_node:
+    widget: number_field
+    label: Number of GPUs per node (min-0, max-1)
+    value: 0
+    min: 0
+    max: 1
+    help: |
+       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
+
   bc_queue: "normal_q"
   bc_num_nodes: 1
 #  bc_account: arcadm
@@ -131,9 +141,15 @@ attributes:
     help: "Ask your instructor"
     value: ""
     required: true
-    
-  num_cores: 64
-#    widget: number_field
-#    label: Number of cores per node (12)
-#    value: 12 ??
+
+  num_cores:
+    widget: select
+    label: "Number of compute cores"
+    help: "This determines how many cores are in the compute job -- more cores, longer wait to start, potentiall faster time to complete."
+    options:
+     - [ "4", "4" ]
+     - [ "8", "8" ]
+     - [ "16", "16" ]
+     - [ "32", "32" ]
+
 
