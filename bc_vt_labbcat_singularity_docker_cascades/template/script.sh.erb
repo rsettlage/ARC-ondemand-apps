@@ -43,6 +43,9 @@ if [[ ! -d $datadir ]]; then
   #copy tomcat files
   mkdir -p $labbcatdir/usr/local
   singularity exec $labbcatimg cp -r /usr/local/tomcat $labbcatdir/usr/local/
+  #copy /usr/local/bin files
+  mkdir -p $labbcatdir/usr/local #unnecessary since we did for tomcat above
+  singularity exec $labbcatimg cp -r /usr/local/bin $labbcatdir/usr/local/
   
   #symlink labbcat to ROOT webapps directory
   rm $labbcatdir/usr/local/tomcat/webapps/ROOT
@@ -50,6 +53,9 @@ if [[ ! -d $datadir ]]; then
   
   #make directory for /var/log/tomcat
   mkdir -p $labbcatdir/var/log/tomcat
+
+  #make directory for /usr/local/bin
+  mkdir -p $labbcatdir/usr/local/bin
 
 
   #set up MySQL directory
@@ -107,14 +113,18 @@ LABBCAT_BASE_URL="https://ondemand.arc.vt.edu"
 [[ $SLURM_SUBMIT_HOST == *"ondemand-preprod"* ]] && LABBCAT_BASE_URL="https://ondemand-preprod.it.vt.edu"
 [[ $SLURM_SUBMIT_HOST == *"ood"* ]] && LABBCAT_BASE_URL="https://ood.arc.vt.edu"
 LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
+#LABBCAT_BASE_URL="/rnode/$(hostname)/$port"
+LABBCAT_REDIRECT_REWRITE="/rnode/$(hostname)/$port" #fix double prefix issue: https://discourse.osc.edu/t/double-url-prefixing-for-web-app/1335
 echo "LABBCAT_BASE_URL=$LABBCAT_BASE_URL"
+echo "LABBCAT_REDIRECT_REWRITE=$LABBCAT_REDIRECT_REWRITE"
 
 #start labbcat
 dbhost=localhost #"127.0.0.1" #"localhost:3306" #"localhost" #127.0.0.1 #"::" #$mysqlinst #$(hostname) #'*'
-SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
+SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_LABBCAT_REDIRECT_REWRITE=$LABBCAT_REDIRECT_REWRITE SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
    --bind=${labbcatdir}/usr/local/tomcat:/usr/local/tomcat:rw \
    --bind=${labbcatdir}/labbcat:/labbcat:rw \
    --bind=${labbcatdir}/var/log/tomcat:/var/log/tomcat:rw \
+   --bind=${labbcatdir}/usr/local/bin:/usr/local/bin:rw \
    --bind=context.xml:/usr/local/tomcat/conf/context.xml \
    --bind=server.xml:/usr/local/tomcat/conf/server.xml \
    $labbcatimg catalina.sh run
