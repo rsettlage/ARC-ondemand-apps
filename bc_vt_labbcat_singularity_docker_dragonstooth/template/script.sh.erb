@@ -6,21 +6,21 @@ export http_proxy="http://uaserve.cc.vt.edu:8080"; export https_proxy="http://ua
 
 # one-time admin setup: pull the LaBB-CAT and mysql containers
 # module load singularity/3.5.1
-# export SINGULARITY_PULLDIR=/groups/arcsingularity
+# export sifdir=/groups/arcsingularity
 # singularity pull docker://mysql/mysql-server:5.6
 # singularity pull --name labbcat_${labbcatver}.sif docker://nzilbb/labbcat:$labbcatver
 
 echo starting singularity
 
 module load singularity/3.5.1
-#### make sure singularity directory is present
-if [ ! -d ${SINGULARITY_PULLDIR} ]; then
-   mkdir -vp ${SINGULARITY_PULLDIR}
-fi
+sifdir="/groups/arcsingularity"
 
 # LaBB-CAT Image
 labbcatver="<%= context.labbcatversion %>"
-labbcatimg="/groups/arcsingularity/labbcat_${labbcatver}.sif"
+labbcatimg="${sifdir}/labbcat_${labbcatver}.sif"
+
+# MySQL Image
+mysqlimg="${sifdir}/mysql-server_5.6.sif"
 
 unset initialinstall
 
@@ -28,7 +28,8 @@ unset initialinstall
 #datadir="$HOME/labbcat"
 datadir="<%= context.datadir %>"
 echo "Using $datadir to store LaBB-CAT files"
-labbcatdir="$datadir/install/$labbcatver" #labbcat directory
+#labbcatdir="$datadir/install/$labbcatver" #labbcat directory
+labbcatdir="$datadir/install" #labbcat directory
 mysqldir="$datadir/mysql"                 #mysql directory
 #set up directory if it doesn't exist
 if [[ ! -d $datadir ]]; then 
@@ -47,10 +48,9 @@ if [[ ! -d $datadir ]]; then
   mkdir -p $labbcatdir/usr/local #unnecessary since we did for tomcat above
   singularity exec $labbcatimg cp -r /usr/local/bin $labbcatdir/usr/local/
   
-  #remove labbcat's symlink to ROOT webapps directory
-  #(we make the connection in server.xml)
+  #symlink labbcat to ROOT webapps directory
   rm $labbcatdir/usr/local/tomcat/webapps/ROOT
-  #ln -s "$labbcatdir/labbcat" $labbcatdir/usr/local/tomcat/webapps/ROOT
+  ln -s "$labbcatdir/labbcat" $labbcatdir/usr/local/tomcat/webapps/ROOT
   
   #make directory for /var/log/tomcat
   mkdir -p $labbcatdir/var/log/tomcat
@@ -63,7 +63,7 @@ if [[ ! -d $datadir ]]; then
   
   #set up user configuration
   mkdir -p $mysqldir/etc
-  singularity exec /groups/arcsingularity/mysql-server_5.6.sif cp /etc/my.cnf $mysqldir/etc/
+  singularity exec $mysqlimg cp /etc/my.cnf $mysqldir/etc/
   sed -i "s/^user=.*$/user=${USER}/g" $mysqldir/etc/my.cnf
   
   #create key directories
@@ -74,9 +74,6 @@ if [[ ! -d $datadir ]]; then
   > $mysqldir/mysqld.log
 
   echo "Initial setup complete."
-  echo "Sleeping for 30 seconds..."
-  sleep 30
-  echo "Done."
 fi
 
 # Start LaBB-CAT
@@ -97,52 +94,44 @@ SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_ROOT_PASSWO
   --bind $mysqldir/var/lib:/var/lib/mysql \
   --bind $mysqldir/var/run:/var/run/mysqld \
   --bind $mysqldir/etc/my.cnf:/etc/my.cnf \
-  --bind $mysqldir/mysqld.log:/var/log/mysqld.log:rw \
+  --bind $mysqldir/mysqld.log:/var/log/mysqld.log \
   --bind entrypoint.sh:/entrypoint.sh \
   --bind $TMPDIR \
-  /groups/arcsingularity/mysql-server_5.6.sif $mysqlinst
+  $mysqlimg $mysqlinst
 
 #start mysqld
 SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_HOST=% singularity run instance://$mysqlinst
 
 
-[[ ! -z $initialinstall ]] && echo "initial setup: sleeping for 30 seconds..." && sleep 30 && echo "done sleeping."
-
-
 #### TOMCAT/LaBB-CAT ####
 
 #customize the tomcat port
-#singularity exec $labbcatimg cat /usr/local/tomcat/conf/server.xml > server.xml
+singularity exec $labbcatimg cat /usr/local/tomcat/conf/server.xml > server.xml
 sed -i "s/8080/${port}/g" server.xml
-#customize tomcat path
-sed -i "s|changethispath|node/$(hostname)/$port|" server.xml
-#customize tomcat doc case 
-sed -i "s|changethisdocbase|$labbcatdir/labbcat|" server.xml
 
-#moved to initial setup under the theory that it only needs to be set the first time
 #set labbcat base url (used for links and stylesheets, etc)
 LABBCAT_BASE_URL="https://ondemand.arc.vt.edu"
 [[ $SLURM_SUBMIT_HOST == *"ondemand-preprod"* ]] && LABBCAT_BASE_URL="https://ondemand-preprod.it.vt.edu"
 [[ $SLURM_SUBMIT_HOST == *"ood"* ]] && LABBCAT_BASE_URL="https://ood.arc.vt.edu"
-#LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
-LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/node/$(hostname)/$port"
-#LABBCAT_BASE_URL="/rnode/$(hostname)/$port" #no different than previous behavior (url attribute null in, e.g., phrase layer wrench button)
-#LABBCAT_BASE_URL="/node/$(hostname)/$port" #style sheets not picked up, phrase layer page doesn't load
+LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
+#LABBCAT_BASE_URL="/rnode/$(hostname)/$port"
+LABBCAT_REDIRECT_REWRITE="/rnode/$(hostname)/$port" #fix double prefix issue: https://discourse.osc.edu/t/double-url-prefixing-for-web-app/1335
 echo "LABBCAT_BASE_URL=$LABBCAT_BASE_URL"
-echo "SLURM_SUBMIT_HOST=$SLURM_SUBMIT_HOST"
+echo "LABBCAT_REDIRECT_REWRITE=$LABBCAT_REDIRECT_REWRITE"
 
 #start labbcat
 dbhost=localhost #"127.0.0.1" #"localhost:3306" #"localhost" #127.0.0.1 #"::" #$mysqlinst #$(hostname) #'*'
-SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
-   --bind=${labbcatdir}/usr/local/tomcat:/usr/local/tomcat:rw \
-   --bind=${labbcatdir}/labbcat:/labbcat:rw \
-   --bind=${labbcatdir}/var/log/tomcat:/var/log/tomcat:rw \
-   --bind=${labbcatdir}/usr/local/bin:/usr/local/bin:rw \
+SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_LABBCAT_REDIRECT_REWRITE=$LABBCAT_REDIRECT_REWRITE SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
+   --bind=${labbcatdir}/usr/local/tomcat:/usr/local/tomcat \
+   --bind=${labbcatdir}/labbcat:/labbcat \
+   --bind=${labbcatdir}/var/log/tomcat:/var/log/tomcat \
+   --bind=${labbcatdir}/usr/local/bin:/usr/local/bin \
+   --bind=context.xml:/usr/local/tomcat/conf/context.xml \
    --bind=server.xml:/usr/local/tomcat/conf/server.xml \
    $labbcatimg catalina.sh run
-   #--bind=context.xml:/usr/local/tomcat/conf/context.xml \
+
 
 #This never seemed to work:
 # #if this is the first run, wait a bit as labbcat does a bit of setup on first run 
 # #that can cause errors for the user if they try to open it too quickly
-# [[ ! -z $initialinstall ]] && echo "initial setup: sleeping for 30 seconds..." && sleep 30 && echo "done sleeping."
+# [[ ! -z $initialinstall ]] && sleep 10

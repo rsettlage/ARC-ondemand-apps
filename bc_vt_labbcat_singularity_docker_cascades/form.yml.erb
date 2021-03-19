@@ -15,7 +15,7 @@ attributes:
     options:
     <%- Dir.glob('/groups/arcsingularity/labbcat*sif').each do |f| -%>
       <%- sif = f.sub('/groups/arcsingularity/','') -%>
-      <%- ver = f.sub('/groups/arcsingularity/','').sub('ood-rstudio-','').chomp(".sif").split('_').last -%>
+      <%- ver = f.sub('/groups/arcsingularity/','').chomp(".sif").split('_').last -%>
       - [ "LaBB-CAT: <%= ver %>", "<%= ver %>" ]
     <%- end -%>
 
@@ -56,10 +56,10 @@ attributes:
 
   num_cores:
     widget: number_field
-    label: Number of cores per node (min-1, max-32)
+    label: Number of cores per node (min-1, max-8)
     value: 1
     min: 1
-    max: 32
+    max: 8
     step: 1
 
 #  gpu_per_node:

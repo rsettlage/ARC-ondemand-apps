@@ -2,19 +2,24 @@
 pwd
 unset XDG_RUNTIME_DIR
 
+
 # one-time admin setup: pull the LaBB-CAT and mysql containers
 # module load singularity/3.5.1
-# export SINGULARITY_PULLDIR=/groups/arcsingularity
+# export sifdir=/groups/arcsingularity
 # singularity pull docker://mysql/mysql-server:5.6
 # singularity pull --name labbcat_${labbcatver}.sif docker://nzilbb/labbcat:$labbcatver
 
 echo starting singularity
 
 module load containers/singularity
+sifdir="/projects/arcsingularity/AMD"
 
 # LaBB-CAT Image
 labbcatver="<%= context.labbcatversion %>"
-labbcatimg="/projects/arcsingularity/AMD/labbcat_${labbcatver}.sif"
+labbcatimg="${sifdir}/labbcat_${labbcatver}.sif"
+
+# MySQL Image
+mysqlimg="${sifdir}/mysql-server_5.6.sif"
 
 unset initialinstall
 
@@ -22,7 +27,8 @@ unset initialinstall
 #datadir="$HOME/labbcat"
 datadir="<%= context.datadir %>"
 echo "Using $datadir to store LaBB-CAT files"
-labbcatdir="$datadir/install/$labbcatver" #labbcat directory
+#labbcatdir="$datadir/install/$labbcatver" #labbcat directory
+labbcatdir="$datadir/install" #labbcat directory
 mysqldir="$datadir/mysql"                 #mysql directory
 #set up directory if it doesn't exist
 if [[ ! -d $datadir ]]; then 
@@ -37,6 +43,9 @@ if [[ ! -d $datadir ]]; then
   #copy tomcat files
   mkdir -p $labbcatdir/usr/local
   singularity exec $labbcatimg cp -r /usr/local/tomcat $labbcatdir/usr/local/
+  #copy /usr/local/bin files
+  mkdir -p $labbcatdir/usr/local #unnecessary since we did for tomcat above
+  singularity exec $labbcatimg cp -r /usr/local/bin $labbcatdir/usr/local/
   
   #symlink labbcat to ROOT webapps directory
   rm $labbcatdir/usr/local/tomcat/webapps/ROOT
@@ -45,12 +54,15 @@ if [[ ! -d $datadir ]]; then
   #make directory for /var/log/tomcat
   mkdir -p $labbcatdir/var/log/tomcat
 
+  #make directory for /usr/local/bin
+  mkdir -p $labbcatdir/usr/local/bin
+
 
   #set up MySQL directory
   
   #set up user configuration
   mkdir -p $mysqldir/etc
-  singularity exec /projects/arcsingularity/AMD/mysql-server_5.6.sif cp /etc/my.cnf $mysqldir/etc/
+  singularity exec $mysqlimg cp /etc/my.cnf $mysqldir/etc/
   sed -i "s/^user=.*$/user=${USER}/g" $mysqldir/etc/my.cnf
   
   #create key directories
@@ -84,7 +96,7 @@ SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_ROOT_PASSWO
   --bind $mysqldir/mysqld.log:/var/log/mysqld.log \
   --bind entrypoint.sh:/entrypoint.sh \
   --bind $TMPDIR \
-  /projects/arcsingularity/AMD/mysql-server_5.6.sif $mysqlinst
+  $mysqlimg $mysqlinst
 
 #start mysqld
 SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_HOST=% singularity run instance://$mysqlinst
@@ -100,21 +112,25 @@ sed -i "s/8080/${port}/g" server.xml
 LABBCAT_BASE_URL="https://ondemand.arc.vt.edu"
 [[ $SLURM_SUBMIT_HOST == *"ondemand-preprod"* ]] && LABBCAT_BASE_URL="https://ondemand-preprod.it.vt.edu"
 [[ $SLURM_SUBMIT_HOST == *"ood"* ]] && LABBCAT_BASE_URL="https://ood.arc.vt.edu"
-##LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
-LABBCAT_BASE_URL="/rnode/$(hostname)/$port"
+LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
+#LABBCAT_BASE_URL="/rnode/$(hostname)/$port"
+LABBCAT_REDIRECT_REWRITE="/rnode/$(hostname)/$port" #fix double prefix issue: https://discourse.osc.edu/t/double-url-prefixing-for-web-app/1335
 echo "LABBCAT_BASE_URL=$LABBCAT_BASE_URL"
+echo "LABBCAT_REDIRECT_REWRITE=$LABBCAT_REDIRECT_REWRITE"
 
 #start labbcat
 dbhost=localhost #"127.0.0.1" #"localhost:3306" #"localhost" #127.0.0.1 #"::" #$mysqlinst #$(hostname) #'*'
-SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
+SINGULARITYENV_LABBCAT_BASE_URL=$LABBCAT_BASE_URL SINGULARITYENV_LABBCAT_REDIRECT_REWRITE=$LABBCAT_REDIRECT_REWRITE SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_HOST=$dbhost SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_PASSWORD= singularity exec \
    --bind=${labbcatdir}/usr/local/tomcat:/usr/local/tomcat \
    --bind=${labbcatdir}/labbcat:/labbcat \
    --bind=${labbcatdir}/var/log/tomcat:/var/log/tomcat \
+   --bind=${labbcatdir}/usr/local/bin:/usr/local/bin \
    --bind=context.xml:/usr/local/tomcat/conf/context.xml \
    --bind=server.xml:/usr/local/tomcat/conf/server.xml \
    $labbcatimg catalina.sh run
 
 
-#if this is the first run, wait a bit as labbcat does a bit of setup on first run 
-#that can cause errors for the user if they try to open it too quickly
-[[ ! -z $initialinstall ]] && sleep 10
+#This never seemed to work:
+# #if this is the first run, wait a bit as labbcat does a bit of setup on first run 
+# #that can cause errors for the user if they try to open it too quickly
+# [[ ! -z $initialinstall ]] && sleep 10
