@@ -109,9 +109,8 @@ singularity exec $labbcatimg cat /usr/local/tomcat/conf/server.xml > server.xml
 sed -i "s/8080/${port}/g" server.xml
 
 #set labbcat base url (used for links and stylesheets, etc)
-LABBCAT_BASE_URL="https://ondemand.arc.vt.edu"
-[[ $SLURM_SUBMIT_HOST == *"ondemand-preprod"* ]] && LABBCAT_BASE_URL="https://ondemand-preprod.it.vt.edu"
-[[ $SLURM_SUBMIT_HOST == *"ood"* ]] && LABBCAT_BASE_URL="https://ood.arc.vt.edu"
+LABBCAT_BASE_URL="https://ood.arc.vt.edu"
+[[ $SLURM_SUBMIT_HOST == *"ondemand"* ]] && LABBCAT_BASE_URL="https://ondemand.it.vt.edu"
 LABBCAT_BASE_URL="${LABBCAT_BASE_URL}/rnode/$(hostname)/$port"
 #LABBCAT_BASE_URL="/rnode/$(hostname)/$port"
 LABBCAT_REDIRECT_REWRITE="/rnode/$(hostname)/$port" #fix double prefix issue: https://discourse.osc.edu/t/double-url-prefixing-for-web-app/1335
