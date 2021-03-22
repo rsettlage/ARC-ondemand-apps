@@ -4,8 +4,8 @@ unset XDG_RUNTIME_DIR
 
 
 # one-time admin setup: pull the LaBB-CAT and mysql containers
-# module load singularity/3.5.1
-# export sifdir=/groups/arcsingularity
+# module load containers/singularity
+# export SINGULARITY_PULLDIR="/projects/arcsingularity/AMD"
 # singularity pull docker://mysql/mysql-server:5.6
 # singularity pull --name labbcat_${labbcatver}.sif docker://nzilbb/labbcat:$labbcatver
 
@@ -63,8 +63,12 @@ if [[ ! -d $datadir ]]; then
   #set up user configuration
   mkdir -p $mysqldir/etc
   singularity exec $mysqlimg cp /etc/my.cnf $mysqldir/etc/
+  #change user
   sed -i "s/^user=.*$/user=${USER}/g" $mysqldir/etc/my.cnf
-  
+  #add port
+  echo '#specify port' >> $mysqldir/etc/my.cnf
+  echo 'port=3306' >> $mysqldir/etc/my.cnf
+
   #create key directories
   mkdir -p $mysqldir/var/lib
   mkdir -p $mysqldir/var/run
@@ -84,6 +88,11 @@ echo starting LaBB-CAT on $(hostname)
 #### MYSQL ####
 
 mysqlinst="labbcat-db"
+
+#specify port
+mysqlport=$((($RANDOM % 28231) + 32768))
+while ( (netstat -tln | grep -c $mysqlport)>0 ) ; do mysqlport=$((($RANDOM % 28231) + 32768)) && echo "mysqlport=$mysqlport"; done
+sed -i "s/^port.*$/port=$mysqlport/" $mysqldir/etc/my.cnf
 
 #set socket
 export MYSQL_UNIX_PORT=$TMPDIR/mysql.sock
