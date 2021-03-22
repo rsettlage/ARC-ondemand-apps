@@ -3,6 +3,7 @@ pwd
 unset XDG_RUNTIME_DIR
 
 
+
 # one-time admin setup: pull the LaBB-CAT and mysql containers
 # module load containers/singularity
 # export SINGULARITY_PULLDIR="/projects/arcsingularity/AMD"
@@ -98,7 +99,6 @@ grep "^port" $mysqldir/etc/my.cnf
 
 #set socket
 export MYSQL_UNIX_PORT=$TMPDIR/mysql.sock
-#export MYSQL_UNIX_PORT=$mysqlport
 
 #start the instance
 SINGULARITYENV_MYSQL_UNIX_PORT=$MYSQL_UNIX_PORT SINGULARITYENV_MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD SINGULARITYENV_MYSQL_PASSWORD=$MYSQL_PASSWORD SINGULARITYENV_MYSQL_ROOT_HOST=% singularity instance start \

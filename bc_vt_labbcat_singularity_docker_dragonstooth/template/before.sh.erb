@@ -11,7 +11,9 @@ export -f port_used
 
 # Find available port to run server on
 port=$(find_port ${host})
-#port=8080
+export shutdownport=$(find_port ${host})
+export redirectport=$(find_port ${host})
+export mysqlport=$(find_port ${host})
 
 export USERNAME=USER
 # # Define a password and export it for MySQL authentication
