@@ -1,6 +1,8 @@
 #!/bin/bash
 sleep 2
 
+echo starting script.sh
+
 unset XDG_RUNTIME_DIR
 
 ## Load up singularity module:
@@ -48,8 +50,11 @@ module --ignore-cache load containers/singularity
     
     echo $DIR_BINDS
     
+    mkdir $TMPFS/runtime-root
+    chmod 777 $TMPFS/runtime-root
+
     ## Final Rendering command
-    singularity exec --writable-tmpfs --bind $DIR_BINDS $MAYA_IMG \
+    singularity exec --writable-tmpfs --bind $DIR_BINDS --bind $TMPFS:/var/tmp $MAYA_IMG \
         Render -r $ENGINE \
         -proj $USER_DIR \
         -of $FORMAT \
@@ -60,4 +65,4 @@ module --ignore-cache load containers/singularity
         -im "<Scene>_<Layer>_<Camera>" -fnc name_#.ext -pad 4 \
         $SCENEFILE
     
-    
+ echo end script.sh
