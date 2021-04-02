@@ -1,10 +1,5 @@
-echo starting before
-sleep 2
-
 # Export the module function if it exists
 [[ $(type -t module) == "function" ]] && export -f module
-module list
-
 hostname
 pwd
 
@@ -47,6 +42,9 @@ ls -lah
 #
 export port=$no_vnc_port
 
+
+## starting logic for serving older clusters
+export ondemand_host="ood.arc.vt.edu"
 
 ## think about using openssl
 # export USERNAME=USER
