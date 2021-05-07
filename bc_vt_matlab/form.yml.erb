@@ -3,7 +3,7 @@
 ---
 cluster: 
   - 'tinkercliffs'
-##  - 'infer'
+  - 'infer'
 
 # Define attribute values that aren't meant to be modified by the user within
 # the Dashboard form
@@ -19,7 +19,7 @@ attributes:
     required: true
     value: 1
     min: 1
-    max: 72
+    max: 48
     step: 1
 
   bc_num_slots:
@@ -45,25 +45,15 @@ attributes:
     max: 128
     step: 1
 
-#  gpu_per_node:
-#    widget: number_field
-#    label: Number of GPUs per node (min-0, max-2)
-#    value: 0
-#    min: 0
-#    max: 2
-#    step: 1
-#    help: |
-#       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
-
-  Container:
-    widget: select
-    label: "use container"
-    help: "This defines the remote desktop version to run."
-    options:
-    <%- Dir.glob('/projects/arcsingularity/accetto*sif').each do |f| -%>
-      <%- sif = f.sub('/projects/arcsingularity/','') -%>
-      - [ "Container: <%= sif %>", "<%= sif %>" ]
-    <%- end -%>
+  gpu_per_node:
+    widget: number_field
+    label: Number of GPUs per node (min-0, max-2)
+    value: 0
+    min: 0
+    max: 1
+    step: 1
+    help: |
+       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
 
   bc_vnc_resolution:
     required: true
@@ -74,13 +64,12 @@ attributes:
 #
 form:
   - cluster
-  - Container
   - bc_account
   - reservation
   - bc_queue
   - bc_num_hours
   - bc_num_slots
   - num_cores
-#  - gpu_per_node
+  - gpu_per_node
   - bc_vnc_resolution
   - bc_email_on_started
