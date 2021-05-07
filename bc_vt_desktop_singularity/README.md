@@ -14,7 +14,6 @@ OnDemand node):
 
 <LIST DEPENDENCIES>
 - [Singularity] 3.7+
-- Accetto's Xfce Desktop with FireFox image
 
 For hardware rendering support (coming soon ...):
 

@@ -1,24 +1,17 @@
 #!/bin/bash -l
 
+# in case we want to do something fun with host/port/etc later
+while [ ! -f ./connection.rc ]; do sleep 1; done
+source connection.rc
+cat connection.rc
 env > env.txt
 
 pwd
-#unset XDG_RUNTIME_DIR
-
-module list
-
-echo running on `hostname`
-echo starting singularity
-
-module load containers/singularity
-	
-singularity run --bind `pwd`:/cwd,/projects,/work/$USER /projects/arcsingularity/ubuntu-xfce-v0.0.1.sif &
-while [ ! -f ./connection.rc ]; do sleep 1; done
-source connection.rc
-xterm
 
 
-#singularity run --bind=/home/$USER:/home/$USER/Documents,/var:/var,`pwd`/vnc.log:/dockerstartup/vnc.log,`pwd`/novnc.log:/dockerstartup/novnc.log,/tmp:/tmp,/projects:/projects,/work:/work,`pwd`/startup.sh:/dockerstartup/startup.sh,`pwd`/port.rc:/dockerstartup/port.rc --writable-tmpfs --containall ${TMPDIR}/<%= context.Container %>
+echo running on ${host}:${port}
 
-
-
+walltime=$(squeue -h -j $SLURM_JOBID -o "%l")
+sleeptime=$(echo $walltime | sed 's/^/((/; s/:/)*60+/g' | bc)
+echo converting walltime to sleeptime: $walltime is $sleeptime
+sleep $sleeptime
