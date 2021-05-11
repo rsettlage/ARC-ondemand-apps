@@ -45,16 +45,6 @@ attributes:
     max: 32
     step: 1
 
-  Container:
-    widget: select
-    label: "use container"
-    help: "This defines the remote desktop version to run."
-    options:
-    <%- Dir.glob('/projects/arcsingularity/accetto*sif').each do |f| -%>
-      <%- sif = f.sub('/projects/arcsingularity/','') -%>
-      - [ "Container: <%= sif %>", "<%= sif %>" ]
-    <%- end -%>
-
   bc_vnc_resolution:
     required: true
 
@@ -71,7 +61,6 @@ attributes:
 
 form:
   - cluster
-  - Container
   - ide_version
   - bc_account
   - reservation

@@ -1,7 +1,6 @@
 ---
 name: Code Server
-category: Interactive Apps
-subcategory: IDE
+category: IDE
 role: batch_connect
 description: |
   This app will launch a [VS Code] server using [Code Server] on the Tinkercliffs

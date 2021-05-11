@@ -1,6 +1,6 @@
 ---
 name: Eclipse
-category: Interactive Apps
+category: IDE
 role: batch_connect
 description: |
   This app will launch [Eclipse] on [TinkerCliffs] and [Infer] -- coming soon.  The underlying desktop container is based off the awesome Xfce image by [accetto].
