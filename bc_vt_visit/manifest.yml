@@ -1,7 +1,6 @@
 ---
 name: VisIT
 category: Interactive Apps
-subcategory: TinkerCliffs
 role: batch_connect
 description: |
   This app will launch a [VisIT] GUI on the [TinkerCliffs cluster]. You will be able to interact with the VisIT GUI 
