@@ -3,15 +3,13 @@ name: GAMS Studio
 category: Interactive Apps
 role: batch_connect
 description: |
-  This app will launch [GAMS Studio] on [TinkerCliffs] and [Infer] -- coming soon.  The underlying desktop container is based off the awesome Xfce image by [accetto].
+  This app will launch [GAMS Studio] in a container on one node.  Currently works on [TinkerCliffs] and [Infer].  For issues or requests, please submit a github issue for the [desktop OOD app].<P>
 
   [GAMS Studio]: https://www.gams.com/latest/docs/T_STUDIO.html
-  [accetto]: https://hub.docker.com/r/accetto/ubuntu-vnc-xfce-firefox-g3
   [TinkerCliffs]: https://www.arc.vt.edu/TinkerCliffs
   [Infer]: https://www.arc.vt.edu/infer
   [DragonsTooth]: https://www.arc.vt.edu/dragonstooth
   [Cascades]: https://www.arc.vt.edu/cascades
   [Huckleberry]: https://www.arc.vt.edu/huckleberry
   [desktop OOD app]:https://github.com/AdvancedResearchComputing/ARC-ondemand-apps/tree/master/bc_vt_desktop
-  [desktop container]: https://github.com/rsettlage/ubuntu-vnc-xfce-g3
 
