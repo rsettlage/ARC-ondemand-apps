@@ -1,0 +1,32 @@
+#!/bin/bash
+pwd
+unset XDG_RUNTIME_DIR
+
+module list
+
+echo running on `hostname`
+echo starting singularity
+
+module load containers/singularity
+#module load Qt5/5.14.1-GCCcore-9.3.0
+## binding log files for troubleshooting
+
+touch vnc.log
+touch novnc.log
+cat port.rc
+
+bash start_container.sh ${TMPDIR}/<%= context.Container %> &
+
+sleep 2
+ls /tmp/.X11-unix
+echo starting Eclipse
+
+echo DISPLAY:$DISPLAY
+echo USER:$USER
+
+
+# Path to Eclipse TC Image
+eclipse_img='/projects/arcsingularity/<%= context.ide_version %>'
+
+
+singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $eclipse_img  /home/headless/eclipse/eclipse
