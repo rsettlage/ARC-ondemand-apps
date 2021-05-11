@@ -1,6 +1,8 @@
 # Batch Connect app configuration file
 ---
-cluster: 'cascades'
+cluster: 
+  - 'tinkercliffs'
+  - 'infer'
 
 # Define attribute values that aren't meant to be modified by the user within
 # the Dashboard form
@@ -19,7 +21,7 @@ attributes:
     step: 1
 
   bc_num_slots:
-    label: Number of nodes (license is single node only)
+    label: Number of nodes
     required: true
     value: 1
     min: 1
@@ -35,10 +37,10 @@ attributes:
 
   num_cores: 
     widget: number_field
-    label: Number of cores per node (min-1, max-16 per license)
+    label: Number of cores per node (min-1, max-128)
     value: 16
     min: 1
-    max: 16
+    max: 128
     step: 1
 
   version:
@@ -46,9 +48,9 @@ attributes:
     label: "VisIT version"
     help: "This defines the version of VisIT you want to load."
     options:
-    <%- Dir.glob('/groups/arcsingularity/ood-visit*sif').each do |f| -%>
-      <%- sif = f.sub('/groups/arcsingularity/','') -%>
-      <%- Vver = f.sub('/groups/arcsingularity/','').sub('ood-visit_','').chomp(".sif") -%>
+    <%- Dir.glob('/projects/arcsingularity/ood-visit*sif').each do |f| -%>
+      <%- sif = f.sub('/projects/arcsingularity/','') -%>
+      <%- Vver = f.sub('/projects/arcsingularity/','').sub('ood-visit_','').chomp(".sif") -%>
       - [ "<%= Vver %>", "<%= sif %>" ]
     <%- end -%>
 

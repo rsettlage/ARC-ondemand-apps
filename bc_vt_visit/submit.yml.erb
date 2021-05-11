@@ -7,13 +7,16 @@
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/BatchConnect/Template
 #
 batch_connect:
-  template: vnc
+  template: "basic"
   set_host: "host=$(hostname -s)"
+  conn_params:
+    - ondemand_host
 #
 # Configure the job script submission parameters for the batch job here
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
 #
 script:
+  copy_environment: true      
   native: 
     - "--nodes=<%= bc_num_slots.blank? ? "1" : bc_num_slots.to_i %>"
     - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
