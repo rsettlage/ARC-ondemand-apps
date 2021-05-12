@@ -22,3 +22,16 @@ OnDemand node):
 [Lmod]: https://www.tacc.utexas.edu/research-development/tacc-projects/lmod
 [VS Code]: https://code.visualstudio.com/
 
+
+## Setup
+
+- Grab the latest official code-server docker image from https://hub.docker.com/r/codercom/code-server 
+- The code-server executable lives in the following path in the image: /usr/lib/code-server/bin/code-server
+- Execute the image using singularity, passing the following args:
+    --auth="password" \
+    --bind-addr="0.0.0.0:${port}" \
+    --disable-telemetry \
+    --extra-extensions-dir="$CODE_SERVER_DATAROOT/extensions" \
+    --user-data-dir="$CODE_SERVER_DATAROOT" \
+    --log debug \
+    "<%= working_dir.to_s %>" 
