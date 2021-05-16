@@ -35,3 +35,22 @@ OnDemand node):
     --user-data-dir="$CODE_SERVER_DATAROOT" \
     --log debug \
     "<%= working_dir.to_s %>" 
+    
+ ## File Picker
+- The form.js file used for codeserver is the base form.js file integrated with the file picker component. 
+- This file will handle all component functions.
+- This file must be included with all apps that may want to use the file picker app.
+- The following code included in `script.sh.erb` must also be included for all other apps that may use the file picker:
+`<%
+
+# Set our working directory.
+working_dir = Pathname.new(context.working_dir)
+
+# Ensure that code-server always starts up in either a user defined directory or the home directory.
+ if ! working_dir.exist?
+     working_dir = Pathname.new(ENV['HOME'])
+     elsif working_dir.file?
+         working_dir = working_dir.parent
+end
+%>`
+- This snippet will check for the user selected directory and set it as the working directory.
