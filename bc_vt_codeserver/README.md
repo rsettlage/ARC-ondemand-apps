@@ -52,4 +52,4 @@ working_dir = Pathname.new(context.working_dir)
 end
 %>
 ```
-- This snippet will ensure that code-server always starts up in either a user defined directory or the home directory.
+- This snippet will ensure that the application always starts up in either a user defined directory or the home directory.
