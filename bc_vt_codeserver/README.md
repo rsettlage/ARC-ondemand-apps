@@ -41,7 +41,8 @@ OnDemand node):
 - This file will handle all component functions.
 - This file must be included with all apps that may want to use the file picker app.
 - The following code included in `script.sh.erb` must also be included for all other apps that may use the file picker:
-`<%
+```
+<%
 working_dir = Pathname.new(context.working_dir)
 
  if ! working_dir.exist?
@@ -49,5 +50,6 @@ working_dir = Pathname.new(context.working_dir)
      elsif working_dir.file?
          working_dir = working_dir.parent
 end
-%>`
+%>
+```
 - This snippet will ensure that code-server always starts up in either a user defined directory or the home directory.
