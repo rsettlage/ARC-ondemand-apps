@@ -22,6 +22,6 @@ echo USER:$USER
 # Path to TMUX image
 tmux_img='/projects/arcsingularity/tmux_latest.sif'
 
-singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $tmux_img bash runScript.sh
+singularity exec --env LC_ALL=C --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $tmux_img bash runScript.sh
 
 wait $!
