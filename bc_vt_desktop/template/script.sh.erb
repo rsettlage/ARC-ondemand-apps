@@ -1,22 +1,17 @@
 #!/bin/bash -l
 
+# in case we want to do something fun with host/port/etc later
+while [ ! -f ./connection.rc ]; do sleep 1; done
+source connection.rc
+cat connection.rc
 env > env.txt
 
 pwd
-#unset XDG_RUNTIME_DIR
-
-module list
-
-echo running on `hostname`
-echo starting singularity
-
-module load containers/singularity
-
-singularity shell --cleanenv --env PYTHONPATH=/usr/local/lib/python3.8/dist-packages/websockify-0.9.0-py3.8.egg \
-    --bind `pwd`:/cwd,/projects,/work/$USER \
-    /projects/arcsingularity/ubuntu-xfce-v0.0.1.sif &
-while [ ! -f ./connection.rc ]; do sleep 1; done
-source connection.rc
-xterm
 
 
+echo running on ${host}:${port}
+
+walltime=$(squeue -h -j $SLURM_JOBID -o "%l")
+sleeptime=$(echo $walltime | sed 's/^/((/; s/:/)*60+/g' | bc)
+echo converting walltime to sleeptime: $walltime is $sleeptime
+sleep $sleeptime
