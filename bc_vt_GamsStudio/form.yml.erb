@@ -58,9 +58,9 @@ attributes:
   Container:
     widget: select
     label: "use container"
-    help: "This defines the remote qGIS version to run."
+    help: "This defines the GAMS Studio version to run."
     options:
-    <%- Dir.glob('/projects/arcsingularity/*gis*sif').each do |f| -%>
+    <%- Dir.glob('/projects/arcsingularity/*gams*sif').each do |f| -%>
       <%- sif = f.sub('/projects/arcsingularity/','') -%>
       - [ "Container: <%= sif %>", "<%= sif %>" ]
     <%- end -%>
