@@ -38,7 +38,7 @@ attributes:
     label: "use container"
     help: "This defines the IGV version to run."
     options:
-    <%- Dir.glob('/projects/arcsingularity/*IGV*sif').each do |f| -%>
+    <%- Dir.glob('/projects/arcsingularity/*igv*sif').each do |f| -%>
       <%- sif = f.sub('/projects/arcsingularity/','') -%>
       - [ "Container: <%= sif %>", "<%= sif %>" ]
     <%- end -%>
