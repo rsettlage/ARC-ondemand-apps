@@ -17,7 +17,7 @@ echo running on ${host}:${port}
 module load containers/singularity
 
 singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work \
-  /projects/arcsingularity/<%= context.Container %> qgis
+  /projects/arcsingularity/<%= context.Container %> bash /igv.sh
 
 wait $!
 
