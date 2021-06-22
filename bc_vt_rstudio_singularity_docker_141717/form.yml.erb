@@ -55,7 +55,7 @@ attributes:
   RstudioContainer:
     widget: text_field
     label: "Container plus path"
-    value: "/projects/arcsingularity/ood-rstudio-basic_4.0.0.sif"
+    value: "/projects/arcsingularity/ood-rstudio141717-basic_4.1.0.sif"
     help: |
       - The full path and filename for the container you want to use.  
   Rversion:
@@ -63,10 +63,10 @@ attributes:
     label: "R version and package set"
     help: "This defines the R version and basic packages installed. You can install more in your session."
     options:
-    <%- Dir.glob('/beegfs/projects/arcsingularity/AMD/ood-rstudio-*sif').each do |f| -%>
-      <%- sif = f.sub('/beegfs/projects/arcsingularity/AMD/','') -%>
-      <%- pkg = f.sub('/beegfs/projects/arcsingularity/AMD/','').sub('ood-rstudio-','').chomp(".sif").split('_').first -%>
-      <%- Rver = f.sub('/beegfs/projects/arcsingularity/AMD/','').sub('ood-rstudio-','').chomp(".sif").split('_').last -%>
+    <%- Dir.glob('/beegfs/projects/arcsingularity/ood-rstudio141717-*sif').each do |f| -%>
+      <%- sif = f.sub('/beegfs/projects/arcsingularity/','') -%>
+      <%- pkg = f.sub('/beegfs/projects/arcsingularity/','').sub('ood-rstudio-','').chomp(".sif").split('_').first -%>
+      <%- Rver = f.sub('/beegfs/projects/arcsingularity/','').sub('ood-rstudio-','').chomp(".sif").split('_').last -%>
       - [ "R: <%= Rver %>  <%= pkg %>", "<%= sif %>" ]
     <%- end -%>
 
