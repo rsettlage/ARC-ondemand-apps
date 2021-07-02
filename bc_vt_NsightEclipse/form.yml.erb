@@ -39,48 +39,34 @@ attributes:
 
   num_cores:
     widget: number_field
-    label: Number of cores per node (min-1, max-128)
+    label: Number of cores per node (min-1, max-32)
     value: 1
     min: 1
-    max: 128
+    max: 32
     step: 1
-
-#  gpu_per_node:
-#    widget: number_field
-#    label: Number of GPUs per node (min-0, max-2)
-#    value: 0
-#    min: 0
-#    max: 2
-#    step: 1
-#    help: |
-#       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
-
-  Container:
-    widget: select
-    label: "use container"
-    help: "This defines the GAMS Studio version to run."
-    options:
-    <%- Dir.glob('/projects/arcsingularity/*nsight*sif').each do |f| -%>
-      <%- sif = f.sub('/projects/arcsingularity/','') -%>
-      - [ "Container: <%= sif %>", "<%= sif %>" ]
-    <%- end -%>
 
   bc_vnc_resolution:
     required: true
 
-# All of the attributes that make up the Dashboard form (in respective order),
-# and made available to the submit configuration file and the template ERB
-# files
-#
+  ide_version:
+    widget: select
+    label: "Select the IDE you want. Java or C++ "
+    help: "This defines the type of IDE users want to work with."
+    options:
+    <%- Dir.glob('/home/ayushchatur/dockertemp/*sif').each do |f| -%>
+      <%- sif = f.sub('/home/ayushchatur/dockertemp','') -%>
+      - [ "eclipse_ver: <%= sif %>", "<%= sif %>" ]
+    <%- end -%>
+
+
 form:
   - cluster
-  - Container
+  - ide_version
   - bc_account
   - reservation
   - bc_queue
   - bc_num_hours
   - bc_num_slots
   - num_cores
-#  - gpu_per_node
   - bc_vnc_resolution
   - bc_email_on_started
