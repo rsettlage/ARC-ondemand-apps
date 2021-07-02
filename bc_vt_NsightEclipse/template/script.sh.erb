@@ -1,6 +1,6 @@
 #!/bin/bash
 while [ ! -f ./connection.rc ]; do sleep 1; done
-source connection.rc
+source ./connection.rc
 
 unset XDG_RUNTIME_DIR
 
@@ -11,10 +11,11 @@ echo starting singularity
 
 module load containers/singularity
 
-if [<%= context.cluster %> == "tinkercliffs"]
+if [<%= context.cluster %> == "tinkercliffs"];then
+echo loaded toolkit 11.2
 module load cuda11.2/toolkit/11.2.0
-then
 else
+echo loaded toolkit 11.1
 module load cuda11.1/toolkit/11.1.0
 fi
  
@@ -28,9 +29,8 @@ echo USER:$USER
 
 
 # Path to Eclipse TC Image
-eclipse_img='/projects/arcsingularity/<%= context.ide_version %>'
+eclipse_img='/home/ayushchatur/dockertemp/<%= context.ide_version %>'
 
 
-singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $eclipse_img  /home/headless/eclipse/eclipse
-
+singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $eclipse_img  /usr/bin/nsight
 wait $!
