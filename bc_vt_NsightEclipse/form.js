@@ -54,8 +54,40 @@ function set_node_type_change_handler() {
   node_type_input.change(node_type_input, fix_num_cores);
 }
 
+function register_listner() {
+  document.getElementById("batch_connect_session_context_cluster").addEventListener("change", change_event);
+}
+
+function change_event() {
+  var cluster_v = document.getElementById("batch_connect_session_context_cluster").value;
+  var cuda_ver = document.getElementById("batch_connect_session_context_ide_version").value;
+  var items;
+  if ( cluster_v == 'tinkercliffs')
+  {
+      items =  ["latest","11.2"];
+  }
+  else if ( cluster_v == 'infer')
+  {
+    items = ["latest","11.1","10.1","10.2"]
+  }
+  else
+  {
+      items = ["latest"]
+  }
+  
+  var str = ""
+  for (var item of items) {
+    str += "<option>" + item + "</option>"
+  }
+  
+  document.getElementById("batch_connect_session_context_ide_version").innerHTML = str;
+
+}
+
 $(document).ready(function() {
   // Set the max value to be what was set in the last session
   fix_num_cores();
   set_node_type_change_handler();
+  register_listner();
+  change_event();
 });

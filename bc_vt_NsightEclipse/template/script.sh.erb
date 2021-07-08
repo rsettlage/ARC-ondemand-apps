@@ -11,14 +11,9 @@ echo starting singularity
 
 module load containers/singularity
 
-if [<%= context.cluster %> == "tinkercliffs"];then
-echo loaded toolkit 11.2
-module load cuda11.2/toolkit/11.2.0
-else
-echo loaded toolkit 11.1
-module load cuda11.1/toolkit/11.1.0
-fi
- 
+echo loading cuda toolkit version <%= context.ide_version%>
+module load cuda<%= context.ide_version%>/toolkit
+echo loaded cuda toolkit 
 
 sleep 2
 ls /tmp/.X11-unix
@@ -29,8 +24,18 @@ echo USER:$USER
 
 
 # Path to Eclipse TC Image
-eclipse_img='/home/ayushchatur/dockertemp/<%= context.ide_version %>'
+eclipse_img='/projects/arcsingularity/nsight.sif'
+module list 
+echo cuda path: $CUDA_PATH
+export SINGULARITYENV_CUDA_PATH=$CUDA_PATH
+export SINGULARITYENV_CUDA_ROOT=$CUDA_ROOT
+export SINGULARITYENV_CUDA_CMLOCAL_ROOT=$CUDA_CMLOCAL_ROOT
+export SINGULARITYENV_CUDA_INSTALL_PATH=$CUDA_INSTALL_PATH
+export SINGULARITYENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+export SINGULARITYENV_CUDA_HOME=$CUDA_HOME
+export SINGULARITYENV_CUDA_INC_PATH=$CUDA_INC_PATH
+export SINGULARITYENV_CUDA_SDK=$CUDA_SDK
+export SINGULARITYENV_LIBRARY_PATH=$LIBRARY_PATH
 
-
-singularity exec --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $eclipse_img  /usr/bin/nsight
+singularity exec --env DISPLAY=$DISPLAY --env CUDA_PATH=$CUDA_PATH --writable-tmpfs --bind=/cm/shared:/cm/shared,/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work $eclipse_img  /usr/bin/nsight
 wait $!

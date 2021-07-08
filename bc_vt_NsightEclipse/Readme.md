@@ -5,9 +5,9 @@
 A noVNC based [Eclipse] IDE app for ondemand
 
 - Includes C/C++ IDE
-- Loads Cuda toolkit 10.1
+- Loads Cuda toolkit version selected
 
 ## Setup
 - Dockerfile uses Accetto base image
 - Install app through the apt-get IDE environment
-- Pre loads cuda toolkit 10.1 on host node
+- Pre loads cuda toolkit latest version on host node
