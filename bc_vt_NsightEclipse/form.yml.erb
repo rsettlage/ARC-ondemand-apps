@@ -45,6 +45,16 @@ attributes:
     max: 32
     step: 1
 
+  gpu_per_node:
+    widget: number_field
+    label: Number of GPUs per node (min-0, max-2)
+    value: 0
+    min: 0
+    max: 1
+    step: 1
+    help: |
+       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
+
   bc_vnc_resolution:
     required: true
 
@@ -65,5 +75,6 @@ form:
   - bc_num_hours
   - bc_num_slots
   - num_cores
+  - gpu_per_node
   - bc_vnc_resolution
   - bc_email_on_started
