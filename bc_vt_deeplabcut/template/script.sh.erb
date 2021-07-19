@@ -1,0 +1,30 @@
+#!/bin/bash -l
+
+while [ ! -f ./connection.rc ]; do sleep 1; done
+source connection.rc
+
+env > env.txt
+
+pwd
+#unset XDG_RUNTIME_DIR
+
+module list
+
+echo running on `hostname`
+echo starting singularity
+echo running on ${host}:${port}
+
+module load containers/singularity
+
+DIR="~/.conda/envs/OOD-DEEPLABCUT"
+if [ -d "$DIR" ]; then
+  # need to install DEEPLABCUT
+  echo "Installing DeepLabCut files in ${DIR}..."
+  singularity exec --bind=`pwd`/OOD-install.sh:/install.sh,`pwd`/OOD-DEEPLABCUT.yaml:/DEEPLABCUT.yaml /work/rsettlag/deeplabcut-gpu-gui.sif bash /install.sh
+fi
+
+singularity exec --nv --env DISPLAY=$DISPLAY --writable-tmpfs --bind=/tmp:/tmp,/tmp/.X11-unix:/tmp/.X11-unix,/projects:/projects,/work:/work,`pwd`/run.sh:/run.sh \
+  /projects/arcsingularity/<%= context.Container %> bash /run.sh
+
+wait $!
+

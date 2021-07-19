@@ -1,0 +1,14 @@
+name: OOD-DEEPLABCUT
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7
+  - pip
+  - jupyter
+  - nb_conda
+  - pytables
+  - ffmpeg
+  - six
+  - wheel
+  - setuptools
