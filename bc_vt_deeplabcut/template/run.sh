@@ -1,3 +1,3 @@
 #!/bin/bash
-source activate DEEPLABCUT
+source activate OOD-DEEPLABCUT
 python -m deeplabcut
