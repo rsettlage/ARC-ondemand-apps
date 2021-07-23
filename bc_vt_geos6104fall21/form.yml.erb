@@ -50,10 +50,10 @@ attributes:
        - These Images are pulled directly from the Jupyter Docker Stacks.  See here: https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks
     value: ""    
     options:
-    <%- Dir.glob('/projects/arcsingularity/geo_fall21/*jupyter*sif').each do |f| -%>
-      <%- sif = f.sub('/projects/arcsingularity/geo_fall21/','') -%>
-      <%- pkg = f.sub('/projects/arcsingularity/geo_fall21/','').sub('desktop','').chomp(".sif").split('_').first -%>
-      <%- JNver = f.sub('/projects/arcsingularity/geo_fall21/','').sub('desktop','').chomp(".sif").split('_').last -%>
+    <%- Dir.glob('/projects/arcsingularity/AMD/*jupyter*sif').each do |f| -%>
+      <%- sif = f.sub('/projects/arcsingularity/AMD/','') -%>
+      <%- pkg = f.sub('/projects/arcsingularity/AMD/','').sub('desktop','').chomp(".sif").split('_').first -%>
+      <%- JNver = f.sub('/projects/arcsingularity/AMD/','').sub('desktop','').chomp(".sif").split('_').last -%>
       - [ "JN: <%= sif %>", "<%= sif %>" ]
     <%- end -%>
 
