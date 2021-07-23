@@ -1,5 +1,5 @@
 'use strict'
-
+document.getElementsByClassName("col-md-3")[0].remove();
 /**
  * Fix num cores, allowing blanks to remain
  */
@@ -11,6 +11,7 @@ function fix_num_cores() {
   if(num_cores_input.val() === '') {
     return;
   }
+  
   
   if(node_type === 'hugemem') {
     set_ppn_owens_hugemem(num_cores_input);
@@ -53,9 +54,41 @@ function set_node_type_change_handler() {
   let node_type_input = $('#batch_connect_session_context_node_type');
   node_type_input.change(node_type_input, fix_num_cores);
 }
+function set_link()
+{
+  var form_root = document.getElementById("img_1").parentElement;
+  var div = document.createElement("div");
+  var img = document.getElementById("img_1");
+  div.innerHTML = "<br><a href=\"https://canvas.vt.edu/courses/137474\"> <b>Canvas Link</a><br> <a href=\"https://github.com/GeoPythonVT/geosf21\"> GitHub Link</a></b> ";
+  img.insertAdjacentElement("afterend",div);
+}
+
+function set_image()
+{
+  try {
+
+    var form = document.getElementById("new_batch_connect_session_context").parentElement;
+    let divholder=document.createDocumentFragment();
+    let img=document.createElement("img");
+    img.src = 'https://raw.githubusercontent.com/AdvancedResearchComputing/ARC-ondemand-apps/master/bc_vt_geos6104fall21/werth_class_pic.jpg';
+    img.id = "img_1";
+    img.class="img-responsive";
+    divholder.appendChild(img);
+    form.insertBefore(img,form.firstElementChild);
+
+    
+  } catch (error) {
+    console.error(error);
+  }
+ 
+}
 
 $(document).ready(function() {
   // Set the max value to be what was set in the last session
+
   fix_num_cores();
   set_node_type_change_handler();
+  set_image();
+  set_link();
+  
 });

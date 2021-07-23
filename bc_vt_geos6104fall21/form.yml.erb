@@ -1,7 +1,6 @@
 # Batch Connect app configuration file
 #
 ---
-
 cluster:
   - 'tinkercliffs'
   - 'infer'
@@ -23,14 +22,6 @@ attributes:
     max: 72
     step: 1
 
-  bc_num_slots:
-    label: Number of nodes (min-1, max-2)
-    required: true
-    value: 1
-    min: 1
-    max: 2
-    step: 1
-
   bc_account:
     widget: text_field
     label: Account
@@ -38,23 +29,19 @@ attributes:
     help: |
        - The allocation you would like to use for SLURM.
 
+  reservation:
+    widget: text_field
+    label: Reservation
+    value: ""
+    help: |
+       - The allocation reservation you would like to use for SLURM.
   num_cores:
     widget: number_field
-    label: Number of cores per node (min-1, max-32)
+    label: Number of cores per node (min-1, max-8)
     value: 1
     min: 1
-    max: 32
+    max: 8
     step: 1
-
-  gpu_per_node:
-    widget: number_field
-    label: Number of GPUs per node (min-0, max-2)
-    value: 0
-    min: 0
-    max: 2
-    step: 1
-    help: |
-       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
 
   Container:
     widget: select
@@ -80,7 +67,5 @@ form:
   - reservation
   - bc_queue
   - bc_num_hours
-  - bc_num_slots
   - num_cores
-#  - gpu_per_node
   - bc_email_on_started
